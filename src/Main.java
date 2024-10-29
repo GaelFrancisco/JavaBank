@@ -4,14 +4,14 @@ public class Main {
         ///
         String accountNumber = "123456789";
         double balance = 1500.75;
-        int pin = 1234;
+        int pin = 12345;
 
         // Array de montos de transacciones
         int[] transactionAmounts = {200, -100, 50};
 
         // Operaciones con variables
         balance += transactionAmounts[0]; // Depósito
-        if (balance > 0 && pin == 1234) {
+        if (balance > 0 && pin == 12345) {
             System.out.println("Acceso Concedido");
         }
 
