@@ -1,79 +1,81 @@
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Main {
+    // Atributos de la clase
+    private String accountNumber = "123456789";
+    private double balance = 1500.75;
+    private int pin = 1234;
+
     public static void main(String[] args) {
-        System.out.println("Opciones del ATM:");
-        System.out.println("1. Ingresar");
-        System.out.println("2. Salir");
-        System.out.println("Selecciona una opción:");
+        Main atm = new Main();
+        System.out.println("Welcome to JavaBank ATM! Version control with Git.");
+        //uso de arrays
+        double balance = 1000.0;
+        ArrayList<String> transactionHistory = new ArrayList<>();
 
-        Scanner sc = new Scanner(System.in);
-        int option = sc.nextInt();
+        deposit(500, balance, transactionHistory);
+        withdraw(100, balance, transactionHistory);
 
-        switch (option) {
-            case 1:
-                checkLogin();
-                break;
-            case 2:
-                getOut();
-                break;
-            default:
-                System.out.println("Opción no válida.");
+        System.out.println("Balance final: " + balance);
+        for (String transaction : transactionHistory) {
+            System.out.println(transaction);
+        }
+
+        // Simulación de transacciones
+        int[] transactionAmounts = {200, -100, 50};
+        atm.processTransactions(transactionAmounts);
+
+        // Estado de la cuenta
+        String status = (atm.balance < 0) ? "Deuda" : "Crédito";
+        System.out.println("Estado de cuenta: " + status);
+
+        // Autenticación del usuario
+        if (atm.authenticateUser("1234")) {
+            System.out.println("Autenticación exitosa. Bienvenido al sistema.");
+        } else {
+            System.out.println("Autenticación fallida. Cuenta bloqueada.");
         }
     }
 
-    private static void checkLogin() {
-        Scanner cl = new Scanner(System.in);
-        int attemps = 0;
-        int pin = 1234;
-        System.out.println("Intoduzca su pin: ");
-        int userpin = cl.nextInt();
-        while (attemps < 3) {
-            if (pin == userpin) {
-                System.out.println("\nBienvenido :)\n");
-                Scanner as = new Scanner(System.in);
-                System.out.println("Selecciona una opcion: ");
-                System.out.println("1. Consultar cuenta");
-                System.out.println("2. Depositar efectivo");
-                System.out.println("3. Retirar efectivo");
-                int secondList = as.nextInt();
+    //metodos para el array
+    public static void deposit(double amount, double balance, ArrayList<String> transactionHistory) {
+        balance += amount;
+        transactionHistory.add("Deposited: $" + amount);
+    }
 
-                switch (secondList) {
-                    case 1:
-                        checkBalance();
-                        break;
-                    case 2:
-                        depositMoney();
-                        break;
-                    case 3:
-                        withdrawMoney();
-                        break;
-                    default:
-                        System.out.println("Opcion no valida");
-                }
+    public static boolean withdraw(double amount, double balance, ArrayList<String> transactionHistory) {
+        if (balance >= amount) {
+            balance -= amount;
+            transactionHistory.add("Withdrew: $" + amount);
+            return true;
+        } else {
+            System.out.println("Insufficient funds");
+            return false;
+        }
+    }
+
+    // Método para procesar transacciones
+    public void processTransactions(int[] transactionAmounts) {
+        for (int amount : transactionAmounts) {
+            balance += amount;
+        }
+        balance++; // Incremento
+        System.out.println("Balance actualizado: " + balance);
+    }
+
+    // Método para autenticar al usuario
+    public boolean authenticateUser(String inputPin) {
+        int attempts = 0;
+        while (attempts < 3) {
+            if (String.valueOf(this.pin).equals(inputPin)) {
+                return true;
             } else {
-                System.out.println("Error intoduzca su pin nuevamente: ");
-                cl.nextInt();
+                attempts++;
+                System.out.println("PIN incorrecto. Intento " + attempts + " de 3.");
             }
-            attemps++;
         }
-        System.out.println("Ha exedido el limite de intentos");
-    }
-
-    private static void getOut() {
-        System.out.println("Adios");
-    }
-
-    private static void checkBalance() {
-        System.out.println("Estamos trabajando en el proceso");
-
-    }
-
-    private static void depositMoney() {
-        System.out.println("Estas trabajando en el proceso");
-    }
-
-    private static void withdrawMoney() {
-        System.out.println("Solo billetes de 100");
+        return false;
     }
 }
+
